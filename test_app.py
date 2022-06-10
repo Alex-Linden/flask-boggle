@@ -2,6 +2,8 @@ from unittest import TestCase
 
 from app import app, games
 
+from pdb import set_trace
+
 # Make Flask errors be real errors, not HTML pages with error info
 app.config['TESTING'] = True
 
@@ -25,6 +27,8 @@ class BoggleAppTestCase(TestCase):
             response = client.get('/')
             html = response.get_data(as_text=True)
 
+            # set_trace()
+
             self.assertEqual(response.status_code, 200)
             self.assertIn('boggle homepage', html)
             #self.assertIn('<button class="word-input-btn">Go</button>', html)
@@ -36,4 +40,10 @@ class BoggleAppTestCase(TestCase):
 
         with self.client as client:
             ...
-            # write a test for this route
+            response = client.post("/api/new-game")
+            gameboard = response.get_data(as_text=True)
+            print(gameboard)
+            # set_trace()
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.is_json, True)
+            self.assertIn("gameId", gameboard)

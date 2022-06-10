@@ -31,3 +31,5 @@ def new_game():
     #check jsonify method
     # will need to make sure the route stores
     # the new game in the games dictionary
+
+# response.game_info["gameId"]
