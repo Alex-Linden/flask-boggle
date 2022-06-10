@@ -32,4 +32,21 @@ def new_game():
     # will need to make sure the route stores
     # the new game in the games dictionary
 
-# response.game_info["gameId"]
+@app.post('/api/score-word')
+def score_word():
+    '''takes in a played word, tests if it is valid and return score'''
+    #find the game object in the games dict that matches the game id
+    #once we have that object stored as a variable we will call
+    #boggle methods to test and score word
+
+    gameId = request.json["gameId"]
+    word = request.json['word']
+    breakpoint()
+    game = games[gameId]
+    if not game.is_word_in_word_list(word):
+        return jsonify({result: "not-word"})
+    elif not game.check_word_on_board(word):
+        return jsonify({result: "not-on-board"})
+    else:
+        return jsonify({result: "ok"})
+
