@@ -25,5 +25,9 @@ def new_game():
     game_id = str(uuid4())
     game = BoggleGame()
     games[game_id] = game
+    game_info = {"gameId": game_id, "board": game.board}
 
-    return {"gameId": "need-real-id", "board": "need-real-board"}
+    return jsonify(game_info)
+    #check jsonify method
+    # will need to make sure the route stores
+    # the new game in the games dictionary
