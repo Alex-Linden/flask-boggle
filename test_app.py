@@ -1,8 +1,10 @@
+from re import U
 from unittest import TestCase
 
 from app import app, games
 
-from pdb import set_trace
+from boggle import BoggleGame
+
 
 # Make Flask errors be real errors, not HTML pages with error info
 app.config['TESTING'] = True
@@ -19,6 +21,11 @@ class BoggleAppTestCase(TestCase):
 
         self.client = app.test_client()
         app.config['TESTING'] = True
+
+        # game = BoggleGame(board_size=3)
+        # game.board = ["C","A","T"], ["O", "X", "X"], ["X", "G", "X"]
+
+        # game_info["board"] = game.board
 
     def test_homepage(self):
         """Make sure information is in the session and HTML is displayed"""
@@ -42,8 +49,42 @@ class BoggleAppTestCase(TestCase):
             ...
             response = client.post("/api/new-game")
             gameboard = response.get_data(as_text=True)
-            print(gameboard)
+            # print(gameboard)
             # set_trace()
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.is_json, True)
             self.assertIn("gameId", gameboard)
+
+    def test_api_score_word(self):
+        """Test scoring a word"""
+
+        with self.client as client:
+            response = client.post("/api/new-game")
+            gameboard = response.get_json()
+            gameId = gameboard["gameId"]
+            print("gameId", gameId)
+
+            resp = client.post('/api/score-word',
+                json={'gameId': gameId, 'word': 'CAT'})
+            json_response = resp.get_json()
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.is_json, True)
+            self.assertEqual({'result': "ok"}, json_response)
+
+            resp_not_word = client.post('/api/score-word',
+                json={'gameId': gameId, 'word': 'XYZ'})
+            json_response_not_word = resp_not_word.get_json()
+
+            self.assertEqual({'result': "not-word"}, json_response_not_word)
+
+            resp_not_board = client.post('/api/score-word',
+                json={'gameId': gameId, 'word': 'QUILL'})
+            json_response_not_board = resp_not_board.get_json()
+
+            self.assertEqual({'result': "not-on-board"}, json_response_not_board)
+
+            # not valid
+            # not on board
+            # okay
+
