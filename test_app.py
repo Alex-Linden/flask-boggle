@@ -22,10 +22,7 @@ class BoggleAppTestCase(TestCase):
         self.client = app.test_client()
         app.config['TESTING'] = True
 
-        # game = BoggleGame(board_size=3)
-        # game.board = ["C","A","T"], ["O", "X", "X"], ["X", "G", "X"]
 
-        # game_info["board"] = game.board
 
     def test_homepage(self):
         """Make sure information is in the session and HTML is displayed"""
@@ -62,7 +59,13 @@ class BoggleAppTestCase(TestCase):
             response = client.post("/api/new-game")
             gameboard = response.get_json()
             gameId = gameboard["gameId"]
-            print("gameId", gameId)
+            game = games[gameId]
+
+            game.board[0] = ['C', 'A', 'T', 'X', 'X']
+            game.board[1] = ['C', 'T', 'X', 'X', 'X']
+            game.board[2] = ['X', 'X', 'X', 'X', 'X']
+            game.board[3] = ['X', 'X', 'X', 'X', 'X']
+            game.board[4] = ['X', 'X', 'X', 'X', 'X']
 
             resp = client.post('/api/score-word',
                 json={'gameId': gameId, 'word': 'CAT'})
