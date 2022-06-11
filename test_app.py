@@ -1,9 +1,8 @@
-from re import U
+#from re import U
 from unittest import TestCase
 
 from app import app, games
 
-from boggle import BoggleGame
 
 
 # Make Flask errors be real errors, not HTML pages with error info
@@ -62,10 +61,6 @@ class BoggleAppTestCase(TestCase):
             game = games[gameId]
 
             game.board[0] = ['C', 'A', 'T', 'X', 'X']
-            game.board[1] = ['C', 'T', 'X', 'X', 'X']
-            game.board[2] = ['X', 'X', 'X', 'X', 'X']
-            game.board[3] = ['X', 'X', 'X', 'X', 'X']
-            game.board[4] = ['X', 'X', 'X', 'X', 'X']
 
             resp = client.post('/api/score-word',
                 json={'gameId': gameId, 'word': 'CAT'})

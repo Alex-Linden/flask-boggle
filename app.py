@@ -35,9 +35,7 @@ def new_game():
 @app.post('/api/score-word')
 def score_word():
     '''takes in a played word, tests if it is valid and return score'''
-    #find the game object in the games dict that matches the game id
-    #once we have that object stored as a variable we will call
-    #boggle methods to test and score word
+
 
     gameId = request.json["gameId"]
     word = request.json['word']
